@@ -4,21 +4,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace API.Models;
 
 [Table("tb_m_account_roles")]
-public class AccountRole
+public class AccountRole : BaseEntity
 {
-    [Key]
-    [Column("guid")]
-    public Guid Guid { get; set; }
-    
     [ForeignKey("account_guid")]
     public Guid AccountGuid { get; set; }
-    
+
     [ForeignKey("role_guid")]
     public Guid RoleGuid { get; set; }
     
-    [Column("created_date")]
-    public DateTime CreatedDate { get; set; }
+    public Account Account { get; set; }
+    public Role Role { get; set; }
     
-    [Column("modified_date")]
-    public DateTime ModifiedDate { get; set; }
+    
 }
