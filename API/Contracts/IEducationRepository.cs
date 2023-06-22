@@ -4,7 +4,7 @@ namespace API.Contracts;
 
 public interface IEducationRepository
 {
-    ICollection<Education>? GetAll();
+    ICollection<Education> GetAll();
     Education? GetByGuid(Guid guid);
     Education Create(Education education);
     bool Update(Education education);

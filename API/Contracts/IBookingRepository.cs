@@ -4,7 +4,7 @@ namespace API.Contracts;
 
 public interface IBookingRepository
 {
-    ICollection<Booking>? GetAll();
+    ICollection<Booking> GetAll();
     Booking? GetByGuid(Guid guid);
     Booking Create(Booking booking);
     bool Update(Booking booking);
