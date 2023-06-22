@@ -30,7 +30,7 @@ public class Employee : BaseEntity
     [Column("phone_number", TypeName = "nvarchar(20)")]
     public string PhoneNumber { get; set; }
     
-    public Account Account { get; set; }
-    public Education Education { get; set; }
-    public ICollection<Booking> Bookings { get; set; }
+    public Account? Account { get; set; }
+    public Education? Education { get; set; }
+    public ICollection<Booking>? Bookings { get; set; }
 }

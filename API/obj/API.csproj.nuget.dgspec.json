@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\source\\repos\\API\\API\\API.csproj": {}
+    "c:\\Users\\user\\source\\repos\\API\\API\\API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\source\\repos\\API\\API\\API.csproj": {
+    "c:\\Users\\user\\source\\repos\\API\\API\\API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\source\\repos\\API\\API\\API.csproj",
+        "projectUniqueName": "c:\\Users\\user\\source\\repos\\API\\API\\API.csproj",
         "projectName": "API",
-        "projectPath": "C:\\Users\\user\\source\\repos\\API\\API\\API.csproj",
+        "projectPath": "c:\\Users\\user\\source\\repos\\API\\API\\API.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\source\\repos\\API\\API\\obj\\",
+        "outputPath": "c:\\Users\\user\\source\\repos\\API\\API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -41,10 +41,6 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "Microsoft.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[6.0.18, )"
-            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[6.0.18, )"

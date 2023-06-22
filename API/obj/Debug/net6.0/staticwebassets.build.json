@@ -1,8 +1,8 @@
 {
   "Version": 1,
-  "Hash": "ENPPFqU3ENOPMS4hjDEo71vUTAwLvmNYRp5J0aoaM24=",
-  "Source": "APIWebApplication",
-  "BasePath": "_content/APIWebApplication",
+  "Hash": "bUm1vPqwZHJejLhtNIB7WgmMI8ngxypkYrDApg4MvgQ=",
+  "Source": "API",
+  "BasePath": "_content/API",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
