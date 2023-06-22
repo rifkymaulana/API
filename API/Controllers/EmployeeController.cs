@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/accounts")]
-public class AccountController : ControllerBase
+[Route("api/employees")]
+public class EmployeeController : ControllerBase
 {
-    private readonly IAccountRepository _repository;
+    private readonly IEmployeeRepository _repository;
     
-    public AccountController(IAccountRepository repository)
+    public EmployeeController(IEmployeeRepository repository)
     {
         _repository = repository;  
     }
@@ -18,34 +18,34 @@ public class AccountController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var accounts = _repository.GetAll();
-        if (!accounts.Any()) return NotFound();
-        return Ok(accounts);
+        var employees = _repository.GetAll();
+        if (!employees.Any()) return NotFound();
+        return Ok(employees);
     }
 
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {
-        var account = _repository.GetByGuid(guid);
-        if (account is null) return NotFound();
-        return Ok(account);
+        var employee = _repository.GetByGuid(guid);
+        if (employee is null) return NotFound();
+        return Ok(employee);
     }
     
     [HttpPost]
-    public IActionResult Create(Account account)
+    public IActionResult Create(Employee employee)
     {
-        var isCreated = _repository.Create(account);
+        var isCreated = _repository.Create(employee);
         return Ok(isCreated);
     }
     
     [HttpPut]
-    public IActionResult Update(Account account)
+    public IActionResult Update(Employee employee)
     {
-        var isUpdated = _repository.Update(account);
+        var isUpdated = _repository.Update(employee);
         if (!isUpdated) return NotFound();
         return Ok();
     }
-    
+
     [HttpDelete]
     public IActionResult Delete(Guid guid)
     {

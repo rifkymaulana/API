@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/accounts")]
-public class AccountController : ControllerBase
+[Route("api/rooms")]
+public class RoomController : ControllerBase
 {
-    private readonly IAccountRepository _repository;
+    private readonly IRoomRepository _repository;
     
-    public AccountController(IAccountRepository repository)
+    public RoomController(IRoomRepository repository)
     {
         _repository = repository;  
     }
@@ -18,30 +18,30 @@ public class AccountController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var accounts = _repository.GetAll();
-        if (!accounts.Any()) return NotFound();
-        return Ok(accounts);
+        var rooms = _repository.GetAll();
+        if (!rooms.Any()) return NotFound();
+        return Ok(rooms);
     }
 
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {
-        var account = _repository.GetByGuid(guid);
-        if (account is null) return NotFound();
-        return Ok(account);
+        var room = _repository.GetByGuid(guid);
+        if (room is null) return NotFound();
+        return Ok(room);
     }
     
     [HttpPost]
-    public IActionResult Create(Account account)
+    public IActionResult Create(Room room)
     {
-        var isCreated = _repository.Create(account);
+        var isCreated = _repository.Create(room);
         return Ok(isCreated);
     }
     
     [HttpPut]
-    public IActionResult Update(Account account)
+    public IActionResult Update(Room room)
     {
-        var isUpdated = _repository.Update(account);
+        var isUpdated = _repository.Update(room);
         if (!isUpdated) return NotFound();
         return Ok();
     }

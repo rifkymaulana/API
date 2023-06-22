@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/accounts")]
-public class AccountController : ControllerBase
+[Route("api/bookings")]
+public class BookingController : ControllerBase
 {
-    private readonly IAccountRepository _repository;
+    private readonly IBookingRepository _repository;
     
-    public AccountController(IAccountRepository repository)
+    public BookingController(IBookingRepository repository)
     {
         _repository = repository;  
     }
@@ -18,34 +18,34 @@ public class AccountController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var accounts = _repository.GetAll();
-        if (!accounts.Any()) return NotFound();
-        return Ok(accounts);
+        var bookings = _repository.GetAll();
+        if (!bookings.Any()) return NotFound();
+        return Ok(bookings);
     }
 
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {
-        var account = _repository.GetByGuid(guid);
-        if (account is null) return NotFound();
-        return Ok(account);
+        var booking = _repository.GetByGuid(guid);
+        if (booking is null) return NotFound();
+        return Ok(booking);
     }
     
     [HttpPost]
-    public IActionResult Create(Account account)
+    public IActionResult Create(Booking booking)
     {
-        var isCreated = _repository.Create(account);
+        var isCreated = _repository.Create(booking);
         return Ok(isCreated);
     }
-    
+
     [HttpPut]
-    public IActionResult Update(Account account)
+    public IActionResult Update(Booking booking)
     {
-        var isUpdated = _repository.Update(account);
+        var isUpdated = _repository.Update(booking);
         if (!isUpdated) return NotFound();
         return Ok();
     }
-    
+
     [HttpDelete]
     public IActionResult Delete(Guid guid)
     {

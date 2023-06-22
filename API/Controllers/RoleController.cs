@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/accounts")]
-public class AccountController : ControllerBase
+[Route("api/roles")]
+public class RolesController : ControllerBase
 {
-    private readonly IAccountRepository _repository;
+    private readonly IRoleRepository _repository;
     
-    public AccountController(IAccountRepository repository)
+    public RolesController(IRoleRepository repository)
     {
         _repository = repository;  
     }
@@ -18,30 +18,30 @@ public class AccountController : ControllerBase
     [HttpGet]
     public IActionResult GetAll()
     {
-        var accounts = _repository.GetAll();
-        if (!accounts.Any()) return NotFound();
-        return Ok(accounts);
+        var roles = _repository.GetAll();
+        if (!roles.Any()) return NotFound();
+        return Ok(roles);
     }
 
     [HttpGet("{guid}")]
     public IActionResult GetByGuid(Guid guid)
     {
-        var account = _repository.GetByGuid(guid);
-        if (account is null) return NotFound();
-        return Ok(account);
+        var role = _repository.GetByGuid(guid);
+        if (role is null) return NotFound();
+        return Ok(role);
     }
     
     [HttpPost]
-    public IActionResult Create(Account account)
+    public IActionResult Create(Role role)
     {
-        var isCreated = _repository.Create(account);
+        var isCreated = _repository.Create(role);
         return Ok(isCreated);
     }
     
     [HttpPut]
-    public IActionResult Update(Account account)
+    public IActionResult Update(Role role)
     {
-        var isUpdated = _repository.Update(account);
+        var isUpdated = _repository.Update(role);
         if (!isUpdated) return NotFound();
         return Ok();
     }
