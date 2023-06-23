@@ -10,7 +10,7 @@ namespace API.Controllers;
 [Route("api/bookings")]
 public class BookingController : BaseController<Booking>
 {
-    public BookingController(IBaseRepository<Booking> repository) : base(repository)
+    public BookingController(IBookingRepository repository) : base(repository)
     {
     }
 }

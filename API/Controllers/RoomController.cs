@@ -8,7 +8,7 @@ namespace API.Controllers;
 [Route("api/rooms")]
 public class RoomController : BaseController<Room>
 {
-    public RoomController(IBaseRepository<Room> repository) : base(repository)
+    public RoomController(IRoomRepository repository) : base(repository)
     {
     }
 }

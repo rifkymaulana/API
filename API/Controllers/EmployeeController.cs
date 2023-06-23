@@ -8,7 +8,7 @@ namespace API.Controllers;
 [Route("api/employees")]
 public class EmployeeController : BaseController<Employee>
 {
-    public EmployeeController(IBaseRepository<Employee> repository) : base(repository)
+    public EmployeeController(IEmployeeRepository repository) : base(repository)
     {
     }
 }

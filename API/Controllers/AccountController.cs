@@ -10,7 +10,7 @@ namespace API.Controllers;
 [Route("api/accounts")]
 public class AccountController : BaseController<Account>
 {
-    public AccountController(IBaseRepository<Account> repository) : base(repository)
+    public AccountController(IAccountRepository repository) : base(repository)
     {
     }
 }

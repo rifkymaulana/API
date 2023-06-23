@@ -9,7 +9,7 @@ namespace API.Controllers;
 [Route("api/universities")]
 public class UniversityController : BaseController<University>
 {
-    public UniversityController(IBaseRepository<University> repository) : base(repository)
+    public UniversityController(IUniversityRepository repository) : base(repository)
     {
     }
 }
