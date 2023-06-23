@@ -4,7 +4,7 @@ using API.Models;
 
 namespace API.Repositories;
 
-public class RoomRepository : BaseRepository<Room>
+public class RoomRepository : BaseRepository<Room>, IRoomRepository
 {
     public RoomRepository(ApplicationDbContext context) : base(context)
     {
