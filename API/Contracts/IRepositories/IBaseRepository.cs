@@ -1,4 +1,4 @@
-﻿namespace API.Contracts;
+﻿namespace API.Contracts.IRepositories;
 
 public interface IBaseRepository<T>
 {

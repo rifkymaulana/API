@@ -1,4 +1,6 @@
 ﻿using API.Contracts;
+using API.Contracts.IRepositories;
+using API.Contracts.IServices;
 using API.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +10,7 @@ namespace API.Controllers;
 [Route("api/roles")]
 public class RolesController : BaseController<Role>
 {
-    public RolesController(IRoleRepository repository) : base(repository)
+    public RolesController(IRoleService service) : base(service)
     {
     }
 }

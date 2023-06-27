@@ -1,4 +1,5 @@
 using API.Contracts;
+using API.Contracts.IRepositories;
 using API.Data;
 using API.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -15,17 +16,17 @@ internal class Program
 
         builder.Services.AddControllers();
 
-        var ConnectionString = builder.Configuration.GetConnectionString("Default");
-        builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(ConnectionString));
+        var connectionString = builder.Configuration.GetConnectionString("Default");
+        builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
-        builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+        /*builder.Services.AddScoped<IAccountRepository, AccountRepository>();
         builder.Services.AddScoped<IAccountRoleRepository, AccountRoleRepository>();
         builder.Services.AddScoped<IBookingRepository, BookingRepository>();
         builder.Services.AddScoped<IEducationRepository, EducationRepository>();
         builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         builder.Services.AddScoped<IRoleRepository, RoleRepository>();
         builder.Services.AddScoped<IRoomRepository, RoomRepository>();
-        builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
+        builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();*/
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -34,8 +35,11 @@ internal class Program
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
-        app.UseSwagger();
-        app.UseSwaggerUI();
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
 
         app.UseHttpsRedirection();
 

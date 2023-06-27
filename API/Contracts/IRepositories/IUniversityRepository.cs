@@ -1,6 +1,6 @@
 ﻿using API.Models;
 
-namespace API.Contracts;
+namespace API.Contracts.IRepositories;
 
 public interface IUniversityRepository : IBaseRepository<University>
 {

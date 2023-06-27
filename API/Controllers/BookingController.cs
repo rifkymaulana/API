@@ -1,4 +1,6 @@
 ﻿using API.Contracts;
+using API.Contracts.IRepositories;
+using API.Contracts.IServices;
 using API.Data;
 using API.Models;
 using API.Repositories;
@@ -10,7 +12,7 @@ namespace API.Controllers;
 [Route("api/bookings")]
 public class BookingController : BaseController<Booking>
 {
-    public BookingController(IBookingRepository repository) : base(repository)
+    public BookingController(IBookingService service) : base(service)
     {
     }
 }

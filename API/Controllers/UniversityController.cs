@@ -1,4 +1,8 @@
-﻿using API.Contracts;
+﻿using System.Net;
+using API.Contracts;
+using API.Contracts.IRepositories;
+using API.Contracts.IServices;
+using API.DTOs.Universities;
 using API.Models;
 using API.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +13,7 @@ namespace API.Controllers;
 [Route("api/universities")]
 public class UniversityController : BaseController<University>
 {
-    public UniversityController(IUniversityRepository repository) : base(repository)
+    public UniversityController(IUniversityService service) : base(service)
     {
     }
 }

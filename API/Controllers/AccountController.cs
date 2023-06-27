@@ -1,4 +1,6 @@
 ﻿using API.Contracts;
+using API.Contracts.IRepositories;
+using API.Contracts.IServices;
 using API.Data;
 using API.Models;
 using API.Repositories;
@@ -10,7 +12,7 @@ namespace API.Controllers;
 [Route("api/accounts")]
 public class AccountController : BaseController<Account>
 {
-    public AccountController(IAccountRepository repository) : base(repository)
+    public AccountController(IAccountService service) : base(service)
     {
     }
 }

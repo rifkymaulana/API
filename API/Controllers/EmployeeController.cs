@@ -1,4 +1,6 @@
 ﻿using API.Contracts;
+using API.Contracts.IRepositories;
+using API.Contracts.IServices;
 using API.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +10,7 @@ namespace API.Controllers;
 [Route("api/employees")]
 public class EmployeeController : BaseController<Employee>
 {
-    public EmployeeController(IEmployeeRepository repository) : base(repository)
+    public EmployeeController(IEmployeeService service) : base(service)
     {
     }
 }

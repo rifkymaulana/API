@@ -1,4 +1,6 @@
 ﻿using API.Contracts;
+using API.Contracts.IRepositories;
+using API.Contracts.IServices;
 using API.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +10,7 @@ namespace API.Controllers;
 [Route("api/rooms")]
 public class RoomController : BaseController<Room>
 {
-    public RoomController(IRoomRepository repository) : base(repository)
+    public RoomController(IRoomService service) : base(service)
     {
     }
 }
