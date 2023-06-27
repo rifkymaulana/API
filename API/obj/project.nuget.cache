@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "Tilir69TY5ADH3U1hIt98607h4e/FoMJAACd6VghLZKbpq2Ov87Z1tbeXe0lLQZF49xmRs306x3+EokIxwfRfA==",
+  "dgSpecHash": "QaKtuKxNqwXdDdZYYsumVS4fCT1eecwBuRKX2LDMa2kIEnqg/POEIOxHVlEdPUj79uSC8jh68rfGGiI/a3LexQ==",
   "success": true,
   "projectFilePath": "/home/rifkymaulana/Repos/API/API/API.csproj",
   "expectedPackageFiles": [
+    "/home/rifkymaulana/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
     "/home/rifkymaulana/.nuget/packages/humanizer.core/2.8.26/humanizer.core.2.8.26.nupkg.sha512",
     "/home/rifkymaulana/.nuget/packages/microsoft.csharp/4.5.0/microsoft.csharp.4.5.0.nupkg.sha512",
     "/home/rifkymaulana/.nuget/packages/microsoft.data.sqlclient/2.1.4/microsoft.data.sqlclient.2.1.4.nupkg.sha512",

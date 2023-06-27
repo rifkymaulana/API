@@ -1,6 +1,7 @@
 ﻿using API.Contracts;
 using API.DTOs.Accounts;
 using API.Models;
+using API.Utilities;
 
 namespace API.Services
 {
@@ -59,8 +60,8 @@ namespace API.Services
                 IsUsed = newAccountDto.IsUsed,
                 CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now,
-                Password = newAccountDto.Password,
-                ExpiredTime = newAccountDto.ExpiredTime,
+                Password = Hashing.HashPassword(newAccountDto.Password),
+                ExpiredTime = DateTime.Now,
                 Otp = newAccountDto.Otp
             };
 
@@ -99,7 +100,7 @@ namespace API.Services
                 CreatedDate = getAccount!.CreatedDate,
                 Otp = updateAccountDto.Otp,
                 ExpiredTime = updateAccountDto.ExpiredTime,
-                Password = updateAccountDto.Password,
+                Password = Hashing.HashPassword(updateAccountDto.Password),
             };
 
             var isUpdate = _accountRepository.Update(account);
