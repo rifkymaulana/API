@@ -5,11 +5,16 @@ namespace API.Repositories;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : class
 {
-    private readonly ApplicationDbContext _context;
+    protected readonly ApplicationDbContext _context;
     
-    public BaseRepository(ApplicationDbContext context)
+    protected BaseRepository(ApplicationDbContext context)
     {
         _context = context;
+    }
+    
+    public bool IsExist(Guid guid)
+    {
+        return GetByGuid(guid) is not null;
     }
     
     public ICollection<T> GetAll()
@@ -32,7 +37,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         }
         catch
         {
-            return null;
+            return null!;
         }
     }
     
@@ -50,12 +55,10 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         }
     }
     
-    public bool Delete(Guid guid)
+    public bool Delete(T entity)
     {
         try
         {
-            var entity = GetByGuid(guid);
-            if (entity is null) return false;
             _context.Set<T>().Remove(entity);
             _context.SaveChanges();
             return true;

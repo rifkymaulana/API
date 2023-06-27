@@ -1,6 +1,6 @@
 ﻿namespace API.DTOs.Educations
 {
-    public class GetEducationDto
+    public class NewEducationDto
     {
         public Guid Guid { get; set; }
         public string Major { get; set; }

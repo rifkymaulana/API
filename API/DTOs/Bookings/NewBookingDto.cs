@@ -2,9 +2,8 @@
 
 namespace API.DTOs.Bookings
 {
-    public class UpdateBookingDto
+    public class NewBookingDto
     {
-        public Guid Guid { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public StatusLevel Status { get; set; }

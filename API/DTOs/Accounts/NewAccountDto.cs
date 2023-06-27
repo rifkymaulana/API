@@ -1,6 +1,6 @@
 ﻿namespace API.DTOs.Accounts
 {
-    public class UpdateAccountDto
+    public class NewAccountDto
     {
         public Guid Guid { get; set; }
         public string Password { get; set; }

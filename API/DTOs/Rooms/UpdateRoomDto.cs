@@ -1,9 +1,10 @@
-namespace API.DTOs.Rooms;
-
-public class UpdateRoomDto
+﻿namespace API.DTOs.Rooms
 {
-    public Guid Guid { get; set; }
-    public string Name { get; set; }
-    public int Floor { get; set; }
-    public int Capacity { get; set; }
+    public class UpdateRoomDto
+    {
+        public Guid Guid { get; set; }
+        public string Name { get; set; }
+        public int Floor { get; set; }
+        public int Capacity { get; set; }
+    }
 }

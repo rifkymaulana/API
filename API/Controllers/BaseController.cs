@@ -44,9 +44,9 @@ public abstract class BaseController<T> : ControllerBase where T : class
     }
     
     [HttpDelete]
-    public IActionResult Delete(Guid guid)
+    public IActionResult Delete(T entity)
     {
-        var isDeleted = _repository.Delete(guid);
+        var isDeleted = _repository.Delete(entity);
         if (!isDeleted) return NotFound();
         return Ok();
     }

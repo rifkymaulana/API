@@ -12,7 +12,7 @@ public class Account : BaseEntity
     public bool IsDeleted { get; set; }
 
     [Column("otp", TypeName = "nvarchar(6)")]
-    public string? Otp { get; set; }
+    public string Otp { get; set; }
 
     [Column("is_used")]
     public bool? IsUsed { get; set; }
