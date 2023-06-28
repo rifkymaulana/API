@@ -1,8 +1,6 @@
 ﻿using System.Net;
 using API.Contracts;
 using API.DTOs.AccountRoles;
-using API.DTOs.Bookings;
-using API.Models;
 using API.Services;
 using API.Utilities;
 using Microsoft.AspNetCore.Mvc;
