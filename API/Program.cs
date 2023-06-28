@@ -16,9 +16,10 @@ internal class Program
 
         builder.Services.AddControllers();
 
-        var ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-        builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(ConnectionString));
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
         
+        // Repositories
         builder.Services.AddScoped<IAccountRepository, AccountRepository>();
         builder.Services.AddScoped<IAccountRoleRepository, AccountRoleRepository>();
         builder.Services.AddScoped<IBookingRepository, BookingRepository>();
@@ -28,6 +29,7 @@ internal class Program
         builder.Services.AddScoped<IRoomRepository, RoomRepository>();
         builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
 
+        // Services
         builder.Services.AddScoped<UniversityService>();
         builder.Services.AddScoped<RoomService>();
         builder.Services.AddScoped<RoleService>();
