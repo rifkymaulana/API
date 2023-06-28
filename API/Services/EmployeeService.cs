@@ -76,6 +76,27 @@ public class EmployeeService
         return entityDtos;
     }
 
+    public GetEmployeeDto GetEmployee(string email, bool isEmail)
+    {
+        var entity = _repository.GetByEmail(email);
+        if (entity == null) return null;
+
+        var entityDto = new GetEmployeeDto()
+        {
+            Guid = entity.Guid,
+            Nik = entity.Nik,
+            FirstName = entity.FirstName,
+            LastName = entity.LastName,
+            BirthDate = entity.BirthDate,
+            Gender = entity.Gender,
+            HiringDate = entity.HiringDate,
+            Email = entity.Email,
+            PhoneNumber = entity.PhoneNumber,
+        };
+
+        return entityDto;
+    }
+
     public GetEmployeeDto? CreateEmployee(CreateEmployeeDto createEntityDto)
     {
         Console.WriteLine(createEntityDto.BirthDate);

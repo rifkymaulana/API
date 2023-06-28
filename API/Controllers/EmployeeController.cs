@@ -179,4 +179,27 @@ public class EmployeeController : ControllerBase
             Data = entities
         });
     }
+    
+    [HttpGet("get-by-email/{email}")]
+    public IActionResult GetByName(string email, bool isEmail)
+    {
+        var entities = _service.GetEmployee(email, isEmail);
+        if (entities is null)
+        {
+            return NotFound(new ResponseHandler<GetEmployeeDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "No universities found with the given name"
+            });
+        }
+
+        return Ok(new ResponseHandler<GetEmployeeDto>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Universities found",
+            Data = entities
+        });
+    }
 }

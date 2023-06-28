@@ -17,9 +17,11 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public ActionResult Register(RegistreDto.RegisterDto registerDto)
+    public ActionResult Register(RegisterDto registerDto)
     {
         var createRegister = _authService.Register(registerDto);
+        Console.WriteLine("createRegister");
+        Console.WriteLine(createRegister);
         if (createRegister is null)
         {
             return BadRequest(new ResponseHandler<GetBookingDto>
@@ -30,7 +32,7 @@ public class AuthController : ControllerBase
             });
         }
 
-        return Ok(new ResponseHandler<RegistreDto.RegisterDto>
+        return Ok(new ResponseHandler<RegisterDto>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),

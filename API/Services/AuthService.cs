@@ -21,7 +21,7 @@ public class AuthService
         _educationRepository = educationRepository;
     }
 
-    public RegistreDto.RegisterDto Register(RegistreDto.RegisterDto registerDto)
+    public RegisterDto Register(RegisterDto registerDto)
     {
         try
         {
@@ -35,11 +35,13 @@ public class AuthService
                 HiringDate = registerDto.HiringDate,
                 Email = registerDto.Email,
                 BirthDate = registerDto.BirthDate,
-                Nik = GenericNik(),
+                Nik = GenerateNik(),
                 CreatedDate = DateTime.Now,
                 ModifiedDate = DateTime.Now
             };
             var createdEmployee = _employeeRepository.Create(employee);
+
+            Console.WriteLine("createdEmployee: " + createdEmployee);
 
             var account = new Account
             {
@@ -54,6 +56,9 @@ public class AuthService
             };
 
             var createdAccount = _accountRepository.Create(account);
+
+            Console.WriteLine("createdAccount: " + createdAccount);
+            
             var university = new University
             {
                 Guid = new Guid(),
@@ -63,6 +68,8 @@ public class AuthService
                 ModifiedDate = DateTime.Now,
             };
             var createdUniversity = _universityRepository.Create(university);
+
+            Console.WriteLine("createdUniversity: " + createdUniversity);
 
             var education = new Education
             {
@@ -75,9 +82,10 @@ public class AuthService
                 ModifiedDate = DateTime.Now,
             };
             var createdEducation = _educationRepository.Create(education);
+            
+            Console.WriteLine("createdEducation: " + createdEducation);
 
-
-            var toDto = new RegistreDto.RegisterDto
+            var toDto = new RegisterDto
             {
                 FirstName = createdEmployee.FirstName,
                 LastName = createdEmployee.LastName,
@@ -102,7 +110,7 @@ public class AuthService
         }
     }
 
-    public string GenericNik()
+    public string GenerateNik()
     {
         var employees = _employeeRepository.GetAll().OrderBy(e => e.Nik).LastOrDefault();
         if (employees is null)
