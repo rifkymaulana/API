@@ -9,4 +9,9 @@ public class EducationRepository : BaseRepository<Education>, IEducationReposito
     public EducationRepository(ApplicationDbContext context) : base(context)
     {
     }
+    
+    public IEnumerable<Education> GetByName(string name)
+    {
+        return _context.Educations.Where(u => u.Major == name).ToList();
+    }
 }
