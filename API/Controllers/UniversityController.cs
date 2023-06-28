@@ -23,7 +23,7 @@ public class UniversityController : ControllerBase
     {
         var universities = _service.GetUniversity();
 
-        if (!universities.Any())
+        if (universities is null)
         {
             return NotFound(new ResponseHandler<GetUniversityDto>
             {
