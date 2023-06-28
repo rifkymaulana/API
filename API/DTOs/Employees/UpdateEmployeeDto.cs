@@ -4,6 +4,7 @@ namespace API.DTOs.Employees;
 
 public class UpdateEmployeeDto
 {
+    public string Nik { get; set; }
     public Guid Guid { get; set; }
     public string FirstName { get; set; }
     public string? LastName { get; set; }
