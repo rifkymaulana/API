@@ -9,4 +9,9 @@ public class UniversityRepository : BaseRepository<University>, IUniversityRepos
     public UniversityRepository(ApplicationDbContext context) : base(context)
     {
     }
+    
+    public IEnumerable<University> GetByName(string name)
+    {
+        return _context.Universities.Where(u => u.Name == name).ToList();
+    }
 }

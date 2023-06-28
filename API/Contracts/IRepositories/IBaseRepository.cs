@@ -6,5 +6,6 @@ public interface IBaseRepository<T>
     T? GetByGuid(Guid guid);
     T Create(T entity);
     bool Update(T entity);
-    bool Delete(Guid guid);
+    bool Delete(T entity);
+    bool IsExist(Guid guid);
 }

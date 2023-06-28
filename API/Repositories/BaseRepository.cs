@@ -5,7 +5,7 @@ namespace API.Repositories;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : class
 {
-    private readonly ApplicationDbContext _context;
+    protected readonly ApplicationDbContext _context;
     
     public BaseRepository(ApplicationDbContext context)
     {
@@ -42,20 +42,20 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         {
             _context.Set<T>().Update(entity);
             _context.SaveChanges();
+            Console.WriteLine("Update success");
             return true;
         }
         catch
         {
+            Console.WriteLine("Update failed");
             return false;
         }
     }
     
-    public bool Delete(Guid guid)
+    public bool Delete(T entity)
     {
         try
         {
-            var entity = GetByGuid(guid);
-            if (entity is null) return false;
             _context.Set<T>().Remove(entity);
             _context.SaveChanges();
             return true;
@@ -64,5 +64,10 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         {
             return false;
         }
+    }
+
+    public bool IsExist(Guid guid)
+    {
+        return _context.Set<T>().Find(guid) != null;
     }
 }
