@@ -1,10 +1,10 @@
 namespace API.Utilities;
 
-public class Hashing
+public class HashingHandler
 {
     private static string GenerateSalt()
     {
-        return BCrypt.Net.BCrypt.GenerateSalt(12); // 12 is the default
+        return BCrypt.Net.BCrypt.GenerateSalt(12);
     }
 
     public static string HashPassword(string password)

@@ -10,8 +10,8 @@ public class RoleRepository : BaseRepository<Role>, IRoleRepository
     {
     }
     
-    public IEnumerable<Role> GetByName(string name)
+    public Role? GetByName(string name)
     {
-        return _context.Roles.Where(u => u.Name == name).ToList();
+        return _context.Set<Role>().FirstOrDefault(r => r.Name == name);
     }
 }

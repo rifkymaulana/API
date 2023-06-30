@@ -168,7 +168,7 @@ public class RoleController : ControllerBase
             });
         }
 
-        return Ok(new ResponseHandler<IEnumerable<GetRoleDto>>
+        return Ok(new ResponseHandler<GetRoleDto>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),

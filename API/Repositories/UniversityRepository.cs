@@ -14,4 +14,16 @@ public class UniversityRepository : BaseRepository<University>, IUniversityRepos
     {
         return _context.Universities.Where(u => u.Name == name).ToList();
     }
+    
+    public University? CreateWithDuplicateCheck(University university)
+    {
+        var getUniversity = _context.Universities.FirstOrDefault(u => u.Name == university.Name && u.Code == university.Code);
+        
+        if (getUniversity != null)
+        {
+            return getUniversity;
+        }
+        
+        return Create(university);
+    }
 }

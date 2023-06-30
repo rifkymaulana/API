@@ -17,7 +17,7 @@ public class Booking : BaseEntity
     public string? Remarks { get; set; }
     
     [Column("status")]
-    public StatusLevel Status { get; set; }
+    public StatusLevelEnum Status { get; set; }
     
     [Column("room_id")]
     public Guid RoomGuid { get; set; }

@@ -41,16 +41,16 @@ public class RoleService
         return entityDto;
     }
 
-    public IEnumerable<GetRoleDto>? GetRole(string name)
+    public GetRoleDto? GetRole(string name)
     {
         var entities = _repository.GetByName(name);
         if (entities == null) return null;
 
-        var entityDtos = entities.Select(u => new GetRoleDto
+        var entityDtos = new GetRoleDto()
         {
-            Guid = u.Guid,
-            Name = u.Name,
-        }).ToList();
+            Guid = entities.Guid,
+            Name = entities.Name
+        };
 
         return entityDtos;
     }

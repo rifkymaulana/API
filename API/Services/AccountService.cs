@@ -1,21 +1,94 @@
 using API.Contracts;
+using API.Data;
+using API.DTOs.AccountRoles;
 using API.DTOs.Accounts;
+using API.DTOs.Educations;
+using API.DTOs.Employees;
+using API.DTOs.Universities;
 using API.Models;
+using API.Utilities;
 
 namespace API.Services;
 
 public class AccountService
 {
-    private readonly IAccountRepository _repository;
+    private readonly ApplicationDbContext _context;
+    private readonly IAccountRepository _accountRepository;
+    private readonly IUniversityRepository _universityRepository;
+    private readonly IEmployeeRepository _employeeRepository;
+    private readonly IEducationRepository _educationRepository;
+    private readonly IRoleRepository _roleRepository;
+    private readonly IAccountRoleRepository _accountRoleRepository;
 
-    public AccountService(IAccountRepository repository)
+    public AccountService(ApplicationDbContext context, IAccountRepository accountRepository,
+        IUniversityRepository universityRepository, IEmployeeRepository employeeRepository,
+        IEducationRepository educationRepository, IRoleRepository roleRepository,
+        IAccountRoleRepository accountRoleRepository)
     {
-        _repository = repository;
+        _context = context;
+        _accountRepository = accountRepository;
+        _universityRepository = universityRepository;
+        _employeeRepository = employeeRepository;
+        _educationRepository = educationRepository;
+        _roleRepository = roleRepository;
+        _accountRoleRepository = accountRoleRepository;
+    }
+
+    public bool RegisterAccount(RegisterAccountDto registerVM)
+    {
+        using var transaction = _context.Database.BeginTransaction();
+        try
+        {
+            var university = _universityRepository.CreateWithDuplicateCheck(new CreateUniversityDto {
+                Code = registerVM.UniversityCode,
+                Name = registerVM.UniversityName
+            });
+
+            Employee employeeData = new CreateEmployeeDto {
+                FirstName = registerVM.FirstName,
+                LastName = registerVM.LastName,
+                BirthDate = registerVM.BirthDate,
+                Gender = registerVM.Gender,
+                HiringDate = registerVM.HiringDate,
+                Email = registerVM.Email,
+                PhoneNumber = registerVM.PhoneNumber
+            };
+            employeeData.Nik = GenerateNikHandler.Nik(_employeeRepository.GetLastEmpoyeeNik());
+
+            var employee = _employeeRepository.Create(employeeData);
+
+            var education = _educationRepository.Create(new CreateEducationDto {
+                Guid = employee.Guid,
+                Major = registerVM.Major,
+                Degree = registerVM.Degree,
+                Gpa = registerVM.Gpa,
+                UniversityGuid = university.Guid,
+            });
+
+            var account = _accountRepository.Create(new CreateAccountDto {
+                EmployeeGuid = employee.Guid,
+                Password = HashingHandler.HashPassword(registerVM.Password)
+            });
+
+            var getRoleUser = _roleRepository.GetByName("User");
+             var accountRole = _accountRoleRepository.Create(new CreateAccountRoleDto {
+                AccountGuid = account.Guid,
+                RoleGuid = getRoleUser.Guid
+            });
+
+            transaction.Commit();
+            return true;
+        }
+        catch
+        {
+            transaction.Rollback();
+            return false;
+        }
     }
 
     public IEnumerable<GetAccountDto>? GetAccount()
     {
-        var entities = _repository.GetAll();
+        var entities = _accountRepository.GetAll();
         if (!entities.Any()) return null;
 
         var entitiesDtos = entities.Select(u => new GetAccountDto
@@ -31,7 +104,7 @@ public class AccountService
 
     public GetAccountDto? GetAccount(Guid guid)
     {
-        var entity = _repository.GetByGuid(guid);
+        var entity = _accountRepository.GetByGuid(guid);
         if (entity == null) return null;
 
         var entityDto = new GetAccountDto()
@@ -55,7 +128,7 @@ public class AccountService
             ModifiedDate = DateTime.Now
         };
 
-        var createdEntity = _repository.Create(entity);
+        var createdEntity = _accountRepository.Create(entity);
         if (createdEntity is null) return null;
 
         var entityDto = new GetAccountDto()
@@ -70,16 +143,16 @@ public class AccountService
 
     public int UpdateAccount(UpdateAccountDto updateEntityDto)
     {
-        var entity = _repository.IsExist(updateEntityDto.EmployeeGuid);
+        var entity = _accountRepository.IsExist(updateEntityDto.EmployeeGuid);
         if (!entity) return -1;
 
-        var entityToUpdate = _repository.GetByGuid(updateEntityDto.EmployeeGuid);
+        var entityToUpdate = _accountRepository.GetByGuid(updateEntityDto.EmployeeGuid);
 
         entityToUpdate!.Password = updateEntityDto.Password;
         entityToUpdate.IsDeleted = updateEntityDto.IsDeleted;
         entityToUpdate.ModifiedDate = DateTime.Now;
 
-        var isUpdated = _repository.Update(entityToUpdate!);
+        var isUpdated = _accountRepository.Update(entityToUpdate!);
         if (!isUpdated) return 0;
 
         return 1;
@@ -87,11 +160,11 @@ public class AccountService
 
     public int DeleteAccountRole(Guid guid)
     {
-        var entity = _repository.IsExist(guid);
+        var entity = _accountRepository.IsExist(guid);
         if (!entity) return -1;
 
-        var entityToDelete = _repository.GetByGuid(guid);
-        var isDeleted = _repository.Delete(entityToDelete!);
+        var entityToDelete = _accountRepository.GetByGuid(guid);
+        var isDeleted = _accountRepository.Delete(entityToDelete!);
         if (!isDeleted) return 0;
 
         return 1;

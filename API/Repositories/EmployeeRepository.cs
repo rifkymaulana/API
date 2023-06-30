@@ -15,6 +15,11 @@ public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
         return _context.Employees.Where(u => u.FirstName == name || u.LastName == name).ToList();
     }
     
+    public string? GetLastEmpoyeeNik()
+    {
+        return _context.Set<Employee>().ToList().Select(e => e.Nik).LastOrDefault();
+    }
+    
     public Employee? GetByEmail(string email, bool isEmail = true)
     {
         return _context.Employees.FirstOrDefault(e => e.Email == email);

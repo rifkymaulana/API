@@ -1,6 +1,6 @@
 ﻿namespace API.Utilities.Enums;
 
-public enum StatusLevel
+public enum StatusLevelEnum
 {
     Requested,
     Rejected,

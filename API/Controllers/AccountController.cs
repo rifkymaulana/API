@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using API.Contracts;
 using API.DTOs.AccountRoles;
 using API.DTOs.Accounts;
 using API.Services;
@@ -14,9 +13,27 @@ public class AccountController : ControllerBase
 {
     private readonly AccountService _service;
 
-    public AccountController(IAccountRepository iRepository)
+    public AccountController(AccountService service)
     {
-        _service = new AccountService(iRepository);
+        _service = service;
+    }
+    
+    [HttpPost("register")]
+    public IActionResult Register(RegisterAccountDto register)
+    {
+        var isCreated = _service.RegisterAccount(register);
+        if (!isCreated)
+            return StatusCode(StatusCodes.Status500InternalServerError, new ResponseHandler<GetAccountDto> {
+                Code = StatusCodes.Status500InternalServerError,
+                Status = HttpStatusCode.InternalServerError.ToString(),
+                Message = "Error retrieving data from the database"
+            });
+
+        return Ok(new ResponseHandler<GetAccountDto> {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Register Success"
+        });
     }
 
     [HttpGet]
