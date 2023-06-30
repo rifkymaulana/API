@@ -18,7 +18,7 @@ internal class Program
 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
-        
+
         // Repositories
         builder.Services.AddScoped<IAccountRepository, AccountRepository>();
         builder.Services.AddScoped<IAccountRoleRepository, AccountRoleRepository>();
@@ -34,7 +34,6 @@ internal class Program
         builder.Services.AddScoped<RoomService>();
         builder.Services.AddScoped<RoleService>();
         builder.Services.AddScoped<EmployeeService>();
-        builder.Services.AddScoped<AuthService>();
         builder.Services.AddScoped<BookingService>();
         builder.Services.AddScoped<AccountService>();
         builder.Services.AddScoped<AccountRoleService>();
