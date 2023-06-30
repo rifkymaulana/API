@@ -3,11 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class ApplicationDbContext : DbContext
+public class AppDbContext : DbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-        
     }
 
     public DbSet<Account> Accounts { get; set; }
@@ -35,7 +34,7 @@ public class ApplicationDbContext : DbContext
             .HasMany(university => university.Educations)
             .WithOne(education => education.University)
             .HasForeignKey(education => education.UniversityGuid);
-        
+
         modelBuilder.Entity<Education>()
             .HasOne(education => education.Employee)
             .WithOne(employee => employee.Education)

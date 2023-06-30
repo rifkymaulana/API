@@ -65,6 +65,30 @@ public class AccountController : ControllerBase
             Data = entity
         });
     }
+    
+    // endpoint login
+    [HttpPost("login")]
+    public IActionResult Login(LoginAccountDto loginAccountDto)
+    {
+        var entity = _service.LoginAccount(loginAccountDto);
+        if (entity is null)
+        {
+            return NotFound(new ResponseHandler<GetAccountDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Data not found"
+            });
+        }
+
+        return Ok(new ResponseHandler<GetAccountDto>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Data found",
+            Data = entity
+        });
+    }
 
     [HttpPost]
     public IActionResult Create(CreateAccountDto newEntityDto)

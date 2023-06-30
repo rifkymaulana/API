@@ -6,7 +6,7 @@ namespace API.Repositories;
 
 public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
 {
-    public EmployeeRepository(ApplicationDbContext context) : base(context)
+    public EmployeeRepository(AppDbContext context) : base(context)
     {
     }
     

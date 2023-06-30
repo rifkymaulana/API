@@ -6,7 +6,7 @@ namespace API.Repositories;
 
 public class UniversityRepository : BaseRepository<University>, IUniversityRepository
 {
-    public UniversityRepository(ApplicationDbContext context) : base(context)
+    public UniversityRepository(AppDbContext context) : base(context)
     {
     }
     

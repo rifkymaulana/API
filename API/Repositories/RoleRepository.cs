@@ -6,7 +6,7 @@ namespace API.Repositories;
 
 public class RoleRepository : BaseRepository<Role>, IRoleRepository
 {
-    public RoleRepository(ApplicationDbContext context) : base(context)
+    public RoleRepository(AppDbContext context) : base(context)
     {
     }
     

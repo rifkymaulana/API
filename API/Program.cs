@@ -2,6 +2,7 @@ using API.Contracts;
 using API.Data;
 using API.Repositories;
 using API.Services;
+using API.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace API;
@@ -17,7 +18,7 @@ internal class Program
         builder.Services.AddControllers();
 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-        builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+        builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
         
         // Repositories
         builder.Services.AddScoped<IAccountRepository, AccountRepository>();
@@ -28,6 +29,8 @@ internal class Program
         builder.Services.AddScoped<IRoleRepository, RoleRepository>();
         builder.Services.AddScoped<IRoomRepository, RoomRepository>();
         builder.Services.AddScoped<IUniversityRepository, UniversityRepository>();
+        
+        builder.Services.AddScoped<ITokenHandler, TokenHandler>();  
 
         // Services
         builder.Services.AddScoped<UniversityService>();

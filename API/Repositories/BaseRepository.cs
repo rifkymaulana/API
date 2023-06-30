@@ -5,9 +5,9 @@ namespace API.Repositories;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : class
 {
-    protected readonly ApplicationDbContext _context;
+    protected readonly AppDbContext _context;
     
-    public BaseRepository(ApplicationDbContext context)
+    public BaseRepository(AppDbContext context)
     {
         _context = context;
     }

@@ -96,4 +96,21 @@ public class AccountService
 
         return 1;
     }
+    
+    // login
+    public GetAccountDto? LoginAccount(LoginAccountDto loginEntityDto)
+    {
+        var entity = _repository.LoginAccount(loginEntityDto.Email, loginEntityDto.Password);
+        if (entity == null) return null;
+        
+        var entityAccount = _repository.GetByGuid(entity.EmployeeGuid);
+
+        var entityDto = new LoginAccountDto()
+        {
+            Email = entity,
+            Password = entity.Password,
+        };
+
+        return entityDto;
+    }
 }
