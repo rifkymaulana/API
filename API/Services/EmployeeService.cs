@@ -76,7 +76,7 @@ public class EmployeeService
         return entityDtos;
     }
 
-    public GetEmployeeDto GetEmployee(string email, bool isEmail)
+    public GetEmployeeDto GetEmployeeByEmail(string email)
     {
         var entity = _repository.GetByEmail(email);
         if (entity == null) return null;

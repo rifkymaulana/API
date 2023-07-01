@@ -1,8 +1,13 @@
+using System.Text;
 using API.Contracts;
 using API.Data;
 using API.Repositories;
 using API.Services;
+using API.Utilities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using TokenHandler = API.Utilities.Handlers.TokenHandler;
 
 namespace API;
 
@@ -39,9 +44,32 @@ internal class Program
         builder.Services.AddScoped<AccountRoleService>();
         builder.Services.AddScoped<EducationService>();
 
+        // Register Handler
+        builder.Services.AddScoped<GenerateNikHandler>();
+        builder.Services.AddScoped<ITokenHandler, TokenHandler>();
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        // Jwt Configuration
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false; // For development
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = builder.Configuration["JWTService:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration["JWTService:Audience"],
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTService:Key"])),
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
 
         var app = builder.Build();
 

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using API.Contracts;
 using API.Data;
 using API.DTOs.AccountRoles;
@@ -19,11 +20,12 @@ public class AccountService
     private readonly IEducationRepository _educationRepository;
     private readonly IRoleRepository _roleRepository;
     private readonly IAccountRoleRepository _accountRoleRepository;
+    private readonly ITokenHandler _tokenHandler;
 
     public AccountService(ApplicationDbContext context, IAccountRepository accountRepository,
         IUniversityRepository universityRepository, IEmployeeRepository employeeRepository,
         IEducationRepository educationRepository, IRoleRepository roleRepository,
-        IAccountRoleRepository accountRoleRepository)
+        IAccountRoleRepository accountRoleRepository, ITokenHandler tokenHandler)
     {
         _context = context;
         _accountRepository = accountRepository;
@@ -32,6 +34,7 @@ public class AccountService
         _educationRepository = educationRepository;
         _roleRepository = roleRepository;
         _accountRoleRepository = accountRoleRepository;
+        _tokenHandler = tokenHandler;
     }
 
     public bool RegisterAccount(RegisterAccountDto registerVM)
@@ -83,6 +86,43 @@ public class AccountService
         {
             transaction.Rollback();
             return false;
+        }
+    }
+    
+    public string LoginAccount(LoginAccountDto login)
+    {
+        var employee = _employeeRepository.GetByEmail(login.Email);
+        if (employee is null)
+            return "0";
+
+        var account = _accountRepository.GetByGuid(employee.Guid);
+        if (account is null)
+            return "0";
+
+        if (!HashingHandler.ValidatePassword(login.Password, account!.Password))
+            return "-1";
+        
+        try
+        {
+            var claims = new List<Claim>() {
+                new Claim("NIK", employee.Nik),
+                new Claim("FullName", $"{employee.FirstName} {employee.LastName}"),
+                new Claim("EmailAddress", login.Email)
+            };
+
+            var getAccountRole = _accountRoleRepository.GetAccountRolesByAccountGuid(employee.Guid);
+            var getRoleNameByAccountRole = from ar in getAccountRole
+                join r in _roleRepository.GetAll() on ar.RoleGuid equals r.Guid
+                select r.Name;
+
+            claims.AddRange(getRoleNameByAccountRole.Select(role => new Claim(ClaimTypes.Role, role)));
+            
+            var getToken = _tokenHandler.GenerateToken(claims);
+            return getToken;
+        }
+        catch
+        {
+            return "-2";
         }
     }
 

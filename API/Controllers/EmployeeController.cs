@@ -181,9 +181,9 @@ public class EmployeeController : ControllerBase
     }
     
     [HttpGet("get-by-email/{email}")]
-    public IActionResult GetByName(string email, bool isEmail)
+    public IActionResult GetByEmail(string email)
     {
-        var entities = _service.GetEmployee(email, isEmail);
+        var entities = _service.GetEmployeeByEmail(email);
         if (entities is null)
         {
             return NotFound(new ResponseHandler<GetEmployeeDto>
