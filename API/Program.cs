@@ -4,6 +4,7 @@ using API.Data;
 using API.Repositories;
 using API.Services;
 using API.Utilities;
+using API.Utilities.Handlers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -51,6 +52,12 @@ internal class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        
+        builder.Services.AddTransient<IEmailHandler, EmailHandler>(_ => new EmailHandler(
+            builder.Configuration["EmailService:SmtpServer"],
+            int.Parse(builder.Configuration["EmailService:SmtpPort"]),
+            builder.Configuration["EmailService:FromEmailAddress"]
+        ));
 
         // Jwt Configuration
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -21,11 +21,13 @@ public class AccountService
     private readonly IRoleRepository _roleRepository;
     private readonly IAccountRoleRepository _accountRoleRepository;
     private readonly ITokenHandler _tokenHandler;
+    private readonly IEmailHandler _emailHandler;
 
     public AccountService(ApplicationDbContext context, IAccountRepository accountRepository,
         IUniversityRepository universityRepository, IEmployeeRepository employeeRepository,
         IEducationRepository educationRepository, IRoleRepository roleRepository,
-        IAccountRoleRepository accountRoleRepository, ITokenHandler tokenHandler)
+        IAccountRoleRepository accountRoleRepository, ITokenHandler tokenHandler,
+        IEmailHandler emailHandler)
     {
         _context = context;
         _accountRepository = accountRepository;
@@ -35,6 +37,7 @@ public class AccountService
         _roleRepository = roleRepository;
         _accountRoleRepository = accountRoleRepository;
         _tokenHandler = tokenHandler;
+        _emailHandler = emailHandler;
     }
 
     public bool RegisterAccount(RegisterAccountDto registerAccountDto)
@@ -132,6 +135,57 @@ public class AccountService
         }
     }
 
+    public int ChangePassword(ChangePasswordDto changePasswordDto)
+    {
+        var employee = _employeeRepository.GetByEmail(changePasswordDto.Email);
+        if (employee is null)
+            return 0; // Email not found
+        
+        var account = _accountRepository.GetByGuid(employee.Guid);
+
+        Console.WriteLine(employee.Email);
+        Console.WriteLine(account.Otp);
+        Console.WriteLine(account.ExpiredTime);
+        
+        if (account is null) return 0; // Email not found
+        if (account.IsUsed == false) return -1; // OTP is used
+        if (account.Otp != changePasswordDto.Otp) return -2; // OTP is incorrect
+        if (account.ExpiredTime < DateTime.Now) return -3; // OTP is expired
+        
+        account.Password = HashingHandler.HashPassword(changePasswordDto.NewPassword);
+        var isUpdated = _accountRepository.Update(account);
+        
+        return isUpdated ? 1    // Success
+            : -4;  // Database Error
+    }
+    
+    public int ForgotPassword(ForgotPasswordDto forgotPassword)
+    {
+        var employee = _employeeRepository.GetByEmail(forgotPassword.Email);
+        if (employee is null)
+            return 0; // Email not found
+
+        var account = _accountRepository.GetByGuid(employee.Guid);
+        if (account is null)
+            return -1;
+
+        var otp = new Random().Next(111111, 999999);
+
+        account.Otp = otp.ToString();
+        var isUpdated = _accountRepository.Update(account);
+
+        if (!isUpdated)
+            return -1;
+
+        Console.WriteLine($"account.Otp {account.Otp}");
+        
+        _emailHandler.SendEmail(forgotPassword.Email, 
+            "Forgot Password", 
+            $"Your OTP is {otp}");
+
+        return 1;
+    }
+    
     public IEnumerable<GetAccountDto>? GetAccount()
     {
         var entities = _accountRepository.GetAll();

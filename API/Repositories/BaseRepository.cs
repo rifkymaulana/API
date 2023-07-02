@@ -45,8 +45,9 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
             Console.WriteLine("Update success");
             return true;
         }
-        catch
+        catch (Exception exception)
         {
+            Console.WriteLine(exception);
             Console.WriteLine("Update failed");
             return false;
         }
