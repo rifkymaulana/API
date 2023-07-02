@@ -5,12 +5,15 @@ using API.DTOs.Employees;
 using API.Models;
 using API.Services;
 using API.Utilities;
+using API.Utilities.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("api/educations")]
+[Authorize(Roles = $"{nameof(RoleLevelEnum.User)}")]
 public class EducationController : ControllerBase
 {
     private readonly EducationService _service;

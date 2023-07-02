@@ -3,12 +3,15 @@ using API.Contracts;
 using API.DTOs.Universities;
 using API.Services;
 using API.Utilities;
+using API.Utilities.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("api/universities")]
+[Authorize(Roles = $"{nameof(RoleLevelEnum.User)}")]
 public class UniversityController : ControllerBase
 {
     private readonly UniversityService _service;
