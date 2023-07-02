@@ -107,6 +107,8 @@ public class AccountService
         if (account is null)
             return "0";
 
+        Console.WriteLine(account.Guid);
+
         if (!HashingHandler.ValidatePassword(login.Password, account.Password))
             return "-1";
 
@@ -120,12 +122,13 @@ public class AccountService
             };
 
             var getAccountRole = _accountRoleRepository.GetAccountRolesByAccountGuid(employee.Guid);
-            var getRoleNameByAccountRole = from ar in getAccountRole
-                join r in _roleRepository.GetAll() on ar.RoleGuid equals r.Guid
-                select r.Name;
+            // get name in role table by role guid
+            var getRoleNameByAccountRole = from accountRole in getAccountRole
+                join role in _roleRepository.GetAll() on accountRole.RoleGuid equals role.Guid
+                select role.Name;
 
             claims.AddRange(getRoleNameByAccountRole.Select(role => new Claim(ClaimTypes.Role, role)));
-
+            
             var getToken = _tokenHandler.GenerateToken(claims);
             return getToken;
         }
