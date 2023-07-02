@@ -37,46 +37,51 @@ public class AccountService
         _tokenHandler = tokenHandler;
     }
 
-    public bool RegisterAccount(RegisterAccountDto registerVM)
+    public bool RegisterAccount(RegisterAccountDto registerAccountDto)
     {
         using var transaction = _context.Database.BeginTransaction();
         try
         {
-            var university = _universityRepository.CreateWithDuplicateCheck(new CreateUniversityDto {
-                Code = registerVM.UniversityCode,
-                Name = registerVM.UniversityName
+            var university = _universityRepository.CreateWithDuplicateCheck(new CreateUniversityDto
+            {
+                Code = registerAccountDto.UniversityCode,
+                Name = registerAccountDto.UniversityName
             });
 
-            Employee employeeData = new CreateEmployeeDto {
-                FirstName = registerVM.FirstName,
-                LastName = registerVM.LastName,
-                BirthDate = registerVM.BirthDate,
-                Gender = registerVM.Gender,
-                HiringDate = registerVM.HiringDate,
-                Email = registerVM.Email,
-                PhoneNumber = registerVM.PhoneNumber
+            Employee employeeData = new CreateEmployeeDto
+            {
+                FirstName = registerAccountDto.FirstName,
+                LastName = registerAccountDto.LastName,
+                BirthDate = registerAccountDto.BirthDate,
+                Gender = registerAccountDto.Gender,
+                HiringDate = registerAccountDto.HiringDate,
+                Email = registerAccountDto.Email,
+                PhoneNumber = registerAccountDto.PhoneNumber
             };
             employeeData.Nik = GenerateNikHandler.Nik(_employeeRepository.GetLastEmpoyeeNik());
 
             var employee = _employeeRepository.Create(employeeData);
 
-            var education = _educationRepository.Create(new CreateEducationDto {
+            _educationRepository.Create(new CreateEducationDto
+            {
                 Guid = employee.Guid,
-                Major = registerVM.Major,
-                Degree = registerVM.Degree,
-                Gpa = registerVM.Gpa,
-                UniversityGuid = university.Guid,
+                Major = registerAccountDto.Major,
+                Degree = registerAccountDto.Degree,
+                Gpa = registerAccountDto.Gpa,
+                UniversityGuid = university!.Guid,
             });
 
-            var account = _accountRepository.Create(new CreateAccountDto {
+            var account = _accountRepository.Create(new CreateAccountDto
+            {
                 EmployeeGuid = employee.Guid,
-                Password = HashingHandler.HashPassword(registerVM.Password)
+                Password = HashingHandler.HashPassword(registerAccountDto.Password)
             });
 
             var getRoleUser = _roleRepository.GetByName("User");
-             var accountRole = _accountRoleRepository.Create(new CreateAccountRoleDto {
+            _accountRoleRepository.Create(new CreateAccountRoleDto
+            {
                 AccountGuid = account.Guid,
-                RoleGuid = getRoleUser.Guid
+                RoleGuid = getRoleUser!.Guid
             });
 
             transaction.Commit();
@@ -88,7 +93,7 @@ public class AccountService
             return false;
         }
     }
-    
+
     public string LoginAccount(LoginAccountDto login)
     {
         var employee = _employeeRepository.GetByEmail(login.Email);
@@ -99,12 +104,13 @@ public class AccountService
         if (account is null)
             return "0";
 
-        if (!HashingHandler.ValidatePassword(login.Password, account!.Password))
+        if (!HashingHandler.ValidatePassword(login.Password, account.Password))
             return "-1";
-        
+
         try
         {
-            var claims = new List<Claim>() {
+            var claims = new List<Claim>()
+            {
                 new Claim("NIK", employee.Nik),
                 new Claim("FullName", $"{employee.FirstName} {employee.LastName}"),
                 new Claim("EmailAddress", login.Email)
@@ -116,7 +122,7 @@ public class AccountService
                 select r.Name;
 
             claims.AddRange(getRoleNameByAccountRole.Select(role => new Claim(ClaimTypes.Role, role)));
-            
+
             var getToken = _tokenHandler.GenerateToken(claims);
             return getToken;
         }
@@ -136,7 +142,6 @@ public class AccountService
             EmployeeGuid = u.Guid,
             Password = u.Password,
             IsDeleted = u.IsDeleted
-            
         }).ToList();
 
         return entitiesDtos;
@@ -192,7 +197,7 @@ public class AccountService
         entityToUpdate.IsDeleted = updateEntityDto.IsDeleted;
         entityToUpdate.ModifiedDate = DateTime.Now;
 
-        var isUpdated = _accountRepository.Update(entityToUpdate!);
+        var isUpdated = _accountRepository.Update(entityToUpdate);
         if (!isUpdated) return 0;
 
         return 1;
