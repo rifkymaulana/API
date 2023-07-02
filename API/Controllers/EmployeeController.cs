@@ -18,9 +18,10 @@ public class EmployeeController : ControllerBase
 {
     private readonly EmployeeService _service;
 
-    public EmployeeController(IEmployeeRepository iRepository)
+    public EmployeeController(IEmployeeRepository iRepository, IEducationRepository educationRepository,
+        IUniversityRepository universityRepository)
     {
-        _service = new EmployeeService(iRepository);
+        _service = new EmployeeService(iRepository, educationRepository, universityRepository);
     }
 
     [HttpGet]
@@ -203,6 +204,29 @@ public class EmployeeController : ControllerBase
             Status = HttpStatusCode.OK.ToString(),
             Message = "Universities found",
             Data = entities
+        });
+    }
+    
+    [HttpGet("get-all-master")]
+    public IActionResult GetMaster()
+    {
+        var master = _service.GetMaster();
+        if (master is null)
+        {
+            return NotFound(new ResponseHandler<EmployeeEducationDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Data Not Found"
+            });
+        }
+
+        return Ok(new ResponseHandler<IEnumerable<EmployeeEducationDto>>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Data Found",
+            Data = master
         });
     }
 }

@@ -7,10 +7,15 @@ namespace API.Services;
 public class EmployeeService
 {
     private readonly IEmployeeRepository _repository;
+    private readonly IEducationRepository _educationRepository;
+    private readonly IUniversityRepository _universityRepository;
 
-    public EmployeeService(IEmployeeRepository repository)
+    public EmployeeService(IEmployeeRepository repository, IEducationRepository educationRepository,
+        IUniversityRepository universityRepository)
     {
         _repository = repository;
+        _educationRepository = educationRepository;
+        _universityRepository = universityRepository;
     }
 
     public IEnumerable<GetEmployeeDto>? GetEmployee()
@@ -141,7 +146,7 @@ public class EmployeeService
         if (!entity) return -1;
 
         var entityToUpdate = _repository.GetByGuid(updateEntityDto.Guid);
-    
+
         entityToUpdate!.Nik = updateEntityDto.Nik;
         entityToUpdate!.FirstName = updateEntityDto.FirstName;
         entityToUpdate.LastName = updateEntityDto.LastName;
@@ -168,5 +173,33 @@ public class EmployeeService
         if (!isDeleted) return 0;
 
         return 1;
+    }
+
+    public IEnumerable<EmployeeEducationDto>? GetMaster()
+    {
+        var master = (from e in _repository.GetAll()
+            join education in _educationRepository.GetAll() on e.Guid equals education.Guid
+            join u in _universityRepository.GetAll() on education.UniversityGuid equals u.Guid
+            select new EmployeeEducationDto
+            {
+                Guid = e.Guid,
+                FullName = e.FirstName + " " + e.LastName,
+                Nik = e.Nik,
+                BirthDate = e.BirthDate,
+                Email = e.Email,
+                HiringDate = e.HiringDate,
+                PhoneNumber = e.PhoneNumber,
+                Major = education.Major,
+                Degree = education.Degree,
+                Gpa = education.Gpa,
+                UniversityName = u.Name
+            }).ToList();
+
+        if (!master.Any())
+        {
+            return null;
+        }
+
+        return master;
     }
 }
