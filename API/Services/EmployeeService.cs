@@ -202,4 +202,13 @@ public class EmployeeService
 
         return master;
     }
+
+    public EmployeeEducationDto? GetMasterByGuid(Guid guid)
+    {
+        var master = GetMaster();
+
+        var masterByGuid = master.FirstOrDefault(master => master.Guid == guid);
+
+        return masterByGuid;
+    }
 }

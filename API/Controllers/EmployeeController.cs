@@ -229,4 +229,27 @@ public class EmployeeController : ControllerBase
             Data = master
         });
     }
+    
+    [HttpGet("get-master/{guid}")]
+    public IActionResult GetMasterByGuid(Guid guid)
+    {
+        var masterGuid = _service.GetMasterByGuid(guid);
+        if (masterGuid is null)
+        {
+            return NotFound(new ResponseHandler<EmployeeEducationDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Data Not Found"
+            });
+        }
+
+        return Ok(new ResponseHandler<EmployeeEducationDto>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Data Found",
+            Data = masterGuid
+        });
+    }
 }
