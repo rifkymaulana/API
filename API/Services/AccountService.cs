@@ -172,6 +172,7 @@ public class AccountService
         var otp = new Random().Next(111111, 999999);
 
         account.Otp = otp.ToString();
+        account.ExpiredTime = DateTime.Now.AddMinutes(5);
         var isUpdated = _accountRepository.Update(account);
 
         if (!isUpdated)
