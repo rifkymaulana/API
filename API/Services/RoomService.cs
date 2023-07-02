@@ -1,16 +1,19 @@
 using API.Contracts;
 using API.DTOs.Rooms;
 using API.Models;
+using API.Utilities.Enums;
 
 namespace API.Services;
 
 public class RoomService
 {
     private readonly IRoomRepository _roomRepository;
+    private readonly IBookingRepository _bookingRepository;
 
-    public RoomService(IRoomRepository roomRepository)
+    public RoomService(IRoomRepository roomRepository, IBookingRepository bookingRepository)
     {
         _roomRepository = roomRepository;
+        _bookingRepository = bookingRepository;
     }
 
     public IEnumerable<GetRoomDto>? GetRoom()
@@ -115,5 +118,45 @@ public class RoomService
         if (!isDeleted) return 0;
 
         return 1;
+    }
+    
+    public IEnumerable<UnusedRoomDto> GetUnusedRoom()
+    {
+        var rooms = _roomRepository.GetAll().ToList();
+
+        var usedRooms = from room in _roomRepository.GetAll()
+            join booking in _bookingRepository.GetAll()
+                on room.Guid equals booking.RoomGuid
+            where booking.Status == StatusLevelEnum.OnGoing
+            select new UnusedRoomDto
+            {
+                RoomGuid = room.Guid,
+                RoomName = room.Name,
+                Floor = room.Floor,
+                Capacity = room.Capacity
+            };
+        List<Room> tempRooms = new List<Room>(rooms);
+
+        foreach (var room in rooms)
+        {
+            foreach (var usedRoom in usedRooms)
+            {
+                if (room.Guid == usedRoom.RoomGuid)
+                {
+                    tempRooms.Remove(room); break;
+                }
+            }
+        }
+
+        var unusedRooms = from room in tempRooms
+            select new UnusedRoomDto
+            {
+                RoomGuid = room.Guid,
+                RoomName = room.Name,
+                Floor = room.Floor,
+                Capacity = room.Capacity
+            };
+
+        return unusedRooms;
     }
 }

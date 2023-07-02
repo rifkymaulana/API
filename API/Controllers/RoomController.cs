@@ -17,9 +17,9 @@ public class RoomController : ControllerBase
 {
     private readonly RoomService _service;
 
-    public RoomController(IRoomRepository roomRepository)
+    public RoomController(IRoomRepository roomRepository, IBookingRepository bookingRepository)
     {
-        _service = new RoomService(roomRepository);
+        _service = new RoomService(roomRepository, bookingRepository);
     }
 
     [HttpGet]
@@ -179,6 +179,30 @@ public class RoomController : ControllerBase
             Status = HttpStatusCode.OK.ToString(),
             Message = "Universities found",
             Data = universities
+        });
+    }
+    
+    [HttpGet("get-unused-rooms")]
+    public IActionResult GetUnusedRooms()
+    {
+        var rooms = _service.GetUnusedRoom();
+        if (rooms.Count() == 0)
+        {
+            return NotFound(new ResponseHandler<IEnumerable<UnusedRoomDto>>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "All Rooms In Used"
+
+            });
+        }
+
+        return Ok(new ResponseHandler<IEnumerable<UnusedRoomDto>>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "Room Unused",
+            Data = rooms
         });
     }
 }
