@@ -109,4 +109,28 @@ public class BookingService
 
         return 1;
     }
+    
+    public List<BookingDetailDto>? GetBookingDetails()
+    {
+        var booking = _repository.GetBookingDetails();
+        var bookingDetails = booking.Select(b => new BookingDetailDto
+        {
+            Guid = b.Guid,
+            BookedNik = b.BookedNik,
+            BookedBy = b.BookedBy,
+            RoomName = b.RoomName,
+            StartDate = b.StartDate,
+            EndDate = b.EndDate,
+            Status = b.Status,
+            Remarks = b.Remarks
+        }).ToList();
+
+        return bookingDetails;
+    }
+
+    public BookingDetailDto? GetBookingDetailsByGuid(Guid guid)
+    {
+        var relatedBooking = GetBookingDetails().SingleOrDefault(b => b.Guid == guid);
+        return relatedBooking;
+    }
 }
