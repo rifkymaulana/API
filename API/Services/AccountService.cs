@@ -107,8 +107,6 @@ public class AccountService
         if (account is null)
             return "0";
 
-        Console.WriteLine(account.Guid);
-
         if (!HashingHandler.ValidatePassword(login.Password, account.Password))
             return "-1";
 
@@ -145,10 +143,6 @@ public class AccountService
             return 0; // Email not found
         
         var account = _accountRepository.GetByGuid(employee.Guid);
-
-        Console.WriteLine(employee.Email);
-        Console.WriteLine(account.Otp);
-        Console.WriteLine(account.ExpiredTime);
         
         if (account is null) return 0; // Email not found
         if (account.IsUsed == false) return -1; // OTP is used
@@ -181,8 +175,6 @@ public class AccountService
         if (!isUpdated)
             return -1;
 
-        Console.WriteLine($"account.Otp {account.Otp}");
-        
         _emailHandler.SendEmail(forgotPassword.Email, 
             "Forgot Password", 
             $"Your OTP is {otp}");

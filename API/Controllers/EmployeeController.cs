@@ -75,7 +75,6 @@ public class EmployeeController : ControllerBase
     public IActionResult Create(CreateEmployeeDto newEntityDto)
     {
         var createdEntity = _service.CreateEmployee(newEntityDto);
-        Console.WriteLine(createdEntity);
         if (createdEntity is null)
         {
             return BadRequest(new ResponseHandler<GetEmployeeDto>

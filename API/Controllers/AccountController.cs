@@ -206,7 +206,6 @@ public class AccountController : ControllerBase
     public IActionResult Create(CreateAccountDto newEntityDto)
     {
         var createdEntity = _service.CreateAccount(newEntityDto);
-        Console.WriteLine(createdEntity);
         if (createdEntity is null)
         {
             return BadRequest(new ResponseHandler<GetAccountDto>

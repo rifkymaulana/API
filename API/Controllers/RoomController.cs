@@ -96,7 +96,6 @@ public class RoomController : ControllerBase
     public IActionResult Update(UpdateRoomDto updateUniversityDto)
     {
         var update = _service.UpdateRoom(updateUniversityDto);
-        Console.WriteLine(update);
         if (update is -1)
         {
             return NotFound(new ResponseHandler<UpdateRoomDto>

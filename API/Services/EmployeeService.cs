@@ -104,8 +104,6 @@ public class EmployeeService
 
     public GetEmployeeDto? CreateEmployee(CreateEmployeeDto createEntityDto)
     {
-        Console.WriteLine(createEntityDto.BirthDate);
-        Console.WriteLine(createEntityDto.HiringDate.GetType());
         var entity = new Employee
         {
             Guid = new Guid(),

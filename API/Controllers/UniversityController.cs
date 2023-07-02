@@ -95,7 +95,6 @@ public class UniversityController : ControllerBase
     public IActionResult Update(UpdateUniversityDto updateUniversityDto)
     {
         var update = _service.UpdateUniversity(updateUniversityDto);
-        Console.WriteLine(update);
         if (update is -1)
         {
             return NotFound(new ResponseHandler<UpdateUniversityDto>

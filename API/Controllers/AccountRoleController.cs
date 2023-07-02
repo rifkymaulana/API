@@ -72,7 +72,6 @@ public class AccountRoleController : ControllerBase
     public IActionResult Create(CreateAccountRoleDto newEntityDto)
     {
         var createdEntity = _service.CreateAccountRole(newEntityDto);
-        Console.WriteLine(createdEntity);
         if (createdEntity is null)
         {
             return BadRequest(new ResponseHandler<GetAccountRoleDto>

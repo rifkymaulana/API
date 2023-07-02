@@ -73,7 +73,6 @@ public class BookingController : ControllerBase
     public IActionResult Create(CreateBookingDto newEntityDto)
     {
         var createdEntity = _service.CreateBooking(newEntityDto);
-        Console.WriteLine(createdEntity);
         if (createdEntity is null)
         {
             return BadRequest(new ResponseHandler<GetBookingDto>

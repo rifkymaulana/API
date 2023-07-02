@@ -74,7 +74,6 @@ public class EducationController : ControllerBase
     public IActionResult Create(CreateEducationDto newEntityDto)
     {
         var createdEntity = _service.CreateEducation(newEntityDto);
-        Console.WriteLine(createdEntity);
         if (createdEntity is null)
         {
             return BadRequest(new ResponseHandler<GetEducationDto>
