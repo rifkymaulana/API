@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text;
 using API.Contracts;
 using API.Data;
@@ -5,7 +6,9 @@ using API.Repositories;
 using API.Services;
 using API.Utilities;
 using API.Utilities.Handlers;
+using API.Utilities.Validations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -20,8 +23,25 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
+        builder.Services.AddControllers()
+            .ConfigureApiBehaviorOptions(options =>
+            {
+                // Custom validation response
+                options.InvalidModelStateResponseFactory = context =>
+                {
+                    var errors = context.ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(v => v.ErrorMessage);
 
-        builder.Services.AddControllers();
+                    return new BadRequestObjectResult(new ResponseValidationHandler
+                    {
+                        Code = StatusCodes.Status400BadRequest,
+                        Status = HttpStatusCode.BadRequest.ToString(),
+                        Message = "Validation error",
+                        Errors = errors.ToArray()
+                    });
+                };
+            });
 
         var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
         builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
@@ -53,7 +73,7 @@ internal class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        
+
         builder.Services.AddTransient<IEmailHandler, EmailHandler>(_ => new EmailHandler(
             builder.Configuration["EmailService:SmtpServer"],
             int.Parse(builder.Configuration["EmailService:SmtpPort"]),
@@ -79,15 +99,29 @@ internal class Program
                 };
             });
         
+        // CORS Configuration
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.AllowAnyOrigin();
+                policy.AllowAnyHeader();
+                policy.AllowAnyMethod();
+            });
+        });
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen(x => {
-            x.SwaggerDoc("v1", new OpenApiInfo {
+        builder.Services.AddSwaggerGen(x =>
+        {
+            x.SwaggerDoc("v1", new OpenApiInfo
+            {
                 Version = "v1",
                 Title = "Metrodata Coding Camp",
                 Description = "ASP.NET Core API 6.0"
             });
-            x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme {
+            x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
                 Name = "Authorization",
                 Type = SecuritySchemeType.Http,
                 Scheme = "Bearer",
@@ -121,7 +155,7 @@ internal class Program
         }
 
         app.UseHttpsRedirection();
-        
+
         app.UseAuthentication();
 
         app.UseAuthorization();

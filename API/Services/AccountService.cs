@@ -127,7 +127,7 @@ public class AccountService
                 join role in _roleRepository.GetAll() on accountRole.RoleGuid equals role.Guid
                 select role.Name;
 
-            claims.AddRange(getRoleNameByAccountRole.Select(role => new Claim(ClaimTypes.Role, role)));
+            claims.AddRange(getRoleNameByAccountRole.Select(role => new Claim("Roles", role)));
             
             var getToken = _tokenHandler.GenerateToken(claims);
             return getToken;
