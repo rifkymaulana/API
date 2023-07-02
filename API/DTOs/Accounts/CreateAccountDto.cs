@@ -1,11 +1,17 @@
+using System.ComponentModel.DataAnnotations;
 using API.Models;
+using API.Utilities;
 
 namespace API.DTOs.Accounts;
 
 public class CreateAccountDto
 {
+    [Required]
     public Guid EmployeeGuid { get; set; }
+    [Required]
+    [PasswordPolicy]
     public string Password { get; set; }
+    [Required]
     public bool IsDeleted { get; set; }
     public string? Otp { get; set; }
     public bool? IsUsed { get; set; }

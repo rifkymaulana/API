@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "zRBPIcCdG64J0SZj0i+TxrNNv6YLV05hzHu7P5JZBjW3sTP08Ulttz3iG4IsFjR2aUIu8DMqlqhAQ1fknz/GJg==",
+  "dgSpecHash": "sYHcHuaKLQ0tP8DrihHBzAs9H2sG6b0KpVdH5/6Yo+D+FHeTSAcO6sVfOPoNFskm/mFzmDG526UFvc934XMaJA==",
   "success": true,
   "projectFilePath": "/home/rifkymaulana/Repos/API/API/API.csproj",
   "expectedPackageFiles": [
     "/home/rifkymaulana/.nuget/packages/bcrypt.net-next/4.0.3/bcrypt.net-next.4.0.3.nupkg.sha512",
+    "/home/rifkymaulana/.nuget/packages/fluentvalidation/11.5.2/fluentvalidation.11.5.2.nupkg.sha512",
     "/home/rifkymaulana/.nuget/packages/humanizer.core/2.8.26/humanizer.core.2.8.26.nupkg.sha512",
     "/home/rifkymaulana/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/6.0.19/microsoft.aspnetcore.authentication.jwtbearer.6.0.19.nupkg.sha512",
     "/home/rifkymaulana/.nuget/packages/microsoft.csharp/4.5.0/microsoft.csharp.4.5.0.nupkg.sha512",

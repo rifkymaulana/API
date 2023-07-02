@@ -41,7 +41,7 @@ public class AccountController : ControllerBase
     }
     
     [AllowAnonymous]
-    [HttpPost("Login")]
+    [HttpPost("login")]
     public IActionResult Login(LoginAccountDto login)
     {
         var loginResult = _service.LoginAccount(login);

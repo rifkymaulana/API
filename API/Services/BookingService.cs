@@ -56,7 +56,6 @@ public class BookingService
             Guid = new Guid(),
             StartDate = createEntityDto.StartDate,
             EndDate = createEntityDto.EndDate,
-            Status = createEntityDto.Status,
             RoomGuid = createEntityDto.RoomGuid,
             EmployeeGuid = createEntityDto.EmployeeGuid,
             CreatedDate = DateTime.Now,

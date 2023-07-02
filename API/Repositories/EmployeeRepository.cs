@@ -15,6 +15,12 @@ public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
         return _context.Employees.Where(u => u.FirstName == name || u.LastName == name).ToList();
     }
     
+    public bool IsDuplicateValue(string value)
+    {
+        return _context.Set<Employee>()
+            .FirstOrDefault(e => e.Email.Contains(value) || e.PhoneNumber.Contains(value)) is null;
+    }
+    
     public string? GetLastEmpoyeeNik()
     {
         return _context.Set<Employee>().ToList().Select(e => e.Nik).LastOrDefault();

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using API.Models;
 
 namespace API.DTOs.Educations;
@@ -5,8 +6,11 @@ namespace API.DTOs.Educations;
 public class CreateEducationDto
 {
     public Guid Guid { get; set; }
+    [Required]
     public string Major { get; set; }
+    [Required]
     public string Degree { get; set; }
+    [Required]
     public double Gpa { get; set; }
     public Guid? UniversityGuid { get; set; }
     

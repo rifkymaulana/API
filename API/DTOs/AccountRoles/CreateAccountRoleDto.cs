@@ -8,6 +8,7 @@ public class CreateAccountRoleDto
     public Guid Guid { get; set; }
     [Required]
     public Guid AccountGuid { get; set; }
+    [Required]
     public Guid RoleGuid { get; set; }
     
     public static implicit operator AccountRole(CreateAccountRoleDto accountRoleDto)
