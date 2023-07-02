@@ -16,9 +16,10 @@ public class BookingController : ControllerBase
 {
     private readonly BookingService _service;
 
-    public BookingController(IBookingRepository iRepository)
+    public BookingController(IBookingRepository iRepository, IEmployeeRepository employeeRepository,
+        IRoomRepository roomRepository)
     {
-        _service = new BookingService(iRepository);
+        _service = new BookingService(iRepository, employeeRepository, roomRepository);
     }
 
     [HttpGet]
@@ -197,6 +198,29 @@ public class BookingController : ControllerBase
 
         }
         return Ok(new ResponseHandler<BookingDetailDto>
+        {
+            Code = StatusCodes.Status200OK,
+            Status = HttpStatusCode.OK.ToString(),
+            Message = "All Data Found",
+            Data = bookingDetailsGuid
+        });
+    }
+    
+    [HttpGet("booking-today")]
+    public IActionResult GetBookingToday()
+    {
+        var bookingDetailsGuid = _service.BookingToday();
+        if (bookingDetailsGuid == null)
+        {
+            return NotFound(new ResponseHandler<GetBookingDto>
+            {
+                Code = StatusCodes.Status404NotFound,
+                Status = HttpStatusCode.NotFound.ToString(),
+                Message = "Data Not Found"
+            });
+
+        }
+        return Ok(new ResponseHandler<IEnumerable<GetBookingTodayDto>>
         {
             Code = StatusCodes.Status200OK,
             Status = HttpStatusCode.OK.ToString(),
