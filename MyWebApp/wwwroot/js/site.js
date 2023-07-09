@@ -44,7 +44,7 @@ var paragraph3 = link3.parentNode.querySelector('p');
 var isClicked3 = false;
 var originalParagraphContent = paragraph3.innerHTML;
 
-link3.addEventListener('click', function() {
+link3.addEventListener('click', function () {
     if (isClicked3) {
         paragraph3.innerHTML = originalParagraphContent;
     } else {
@@ -54,3 +54,29 @@ link3.addEventListener('click', function() {
     isClicked3 = !isClicked3;
 });
 
+// get details of a Pokemon
+function clickDetailPokemon(url) {
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            var modal = document.getElementById("modal-lg");
+            var modalTitle = modal.querySelector(".modal-title");
+            var modalImage1 = modal.querySelector("#img1");
+            var modalImage2 = modal.querySelector("#img2");
+            var modalImage3 = modal.querySelector("#img3");
+            var modalImage4 = modal.querySelector("#img4");
+
+            modalTitle.innerText = data.name + "'s details";
+            modalImage1.src = data.sprites.front_default;
+            modalImage1.alt = data.name;
+            modalImage2.src = data.sprites.back_default;
+            modalImage2.alt = data.name;
+            modalImage3.src = data.sprites.front_shiny;
+            modalImage3.alt = data.name;
+            modalImage4.src = data.sprites.back_shiny;
+            modalImage4.alt = data.name;
+
+            $('#modal-lg').modal('show');
+        })
+        .catch(error => console.error('Unable to get Pokemon details.', error));
+}
