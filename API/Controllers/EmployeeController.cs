@@ -13,7 +13,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/employees")]
-[Authorize(Roles = $"{nameof(RoleLevelEnum.User)}")]
+// [Authorize(Roles = $"{nameof(RoleLevelEnum.User)}")]
 public class EmployeeController : ControllerBase
 {
     private readonly EmployeeService _service;
