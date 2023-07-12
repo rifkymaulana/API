@@ -132,7 +132,7 @@ $(document).ready(function () {
                     return meta.row + 1;
                 }
             },
-            { data: "nik" },
+            {data: "nik"},
             {
                 data: 'fullName',
                 render: function (data, type, row) {
@@ -162,8 +162,203 @@ $(document).ready(function () {
                     return moment(data).format("DD MMMM YYYY");
                 }
             },
-            { data: "email" },
-            { data: "phoneNumber" }
+            {data: "email"},
+            {data: "phoneNumber"},
+            {
+                data: 'action',
+                render: function (data, type, row) {
+                    return `<div><button onclick="Get('${row.guid}')" data-toggle="modal" data-target="#modal-xl-update" class="btn btn-warning">Update</button> <button onclick="Delete('${row.guid}')" class="btn btn-danger">Delete</button></div>`;
+
+                }
+            }
         ]
     });
+});
+
+function createEmployee() {
+    let nik = document.querySelector("#nik").value;
+    let firstName = document.querySelector("#firstName").value;
+    let lastName = document.querySelector("#lastName").value;
+    let birthDate = document.querySelector("#birthDate").value;
+    let gender = document.querySelector("#gender").value;
+    let genderEnum;
+    if (gender === "0") {
+        genderEnum = 0;
+    } else if (gender === "1") {
+        genderEnum = 1;
+    }
+    let hiringDate = document.querySelector("#hiringDate").value;
+    let email = document.querySelector("#email").value;
+    let phoneNumber = document.querySelector("#phoneNumber").value;
+    // Data ke api
+    let data = {
+        nik: nik,
+        firstName: firstName,
+        lastName: lastName,
+        birthDate: birthDate,
+        gender: genderEnum,
+        hiringDate: hiringDate,
+        email: email,
+        phoneNumber: phoneNumber
+    };
+
+    console.log(data);
+
+    $.ajax({
+        url: "https://localhost:7000/api/employees", // Sesuaikan URL sesuai dengan endpoint API Anda
+        type: "POST",
+        data: JSON.stringify(data),
+        contentType: "application/json"
+    }).done(result => {
+        alert("Insert successful"); // Tampilkan alert pemberitahuan jika berhasil
+        location.reload();
+    }).fail(error => {
+        alert("Insert failed"); // Tampilkan alert pemberitahuan jika gagal
+    });
+}
+
+function Get(data) {
+    console.log(data);
+    $.ajax({
+        url: "https://localhost:7000/api/employees/" + data, // Sesuaikan URL sesuai dengan endpoint API Anda
+        type: "GET",
+        dataType: "json"
+    }).done(res => {
+        $("#guidU").val(res.data.guid);
+        $("#nikU").val(res.data.nik);
+        $("#firstNameU").val(res.data.firstName);
+        $("#lastNameU").val(res.data.lastName);
+        let birthDate = moment(res.data.birthDate).format('yyyy-MM-DD');
+        $("#birthDateU").val(birthDate);
+        let genderEnum = res.data.gender;
+        if (genderEnum === 0) {
+            gender = "0";
+        } else if (genderEnum === 1) {
+            gender = "1";
+        }
+        $("#genderU").val(gender);
+        let hiringDate = moment(res.data.hiringDate).format('yyyy-MM-DD');
+        $("#hiringDateU").val(hiringDate);
+        $("#emailU").val(res.data.email);
+        $("#phoneNumberU").val(res.data.phoneNumber);
+        console.log(res);
+    }).fail(error => {
+        alert("Insert failed"); // Tampilkan alert pemberitahuan jika gagal
+    });
+}
+
+function Delete(deleteId) {
+    Swal.fire({
+        title: 'Konfirmasi',
+        text: 'Apakah Anda yakin ingin menghapus data ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Hapus',
+        cancelButtonText: 'Batal'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Jika pengguna mengonfirmasi untuk menghapus
+            $.ajax({
+                url: "https://localhost:7000/api/employees?guid=" + deleteId, // Sesuaikan URL sesuai dengan endpoint API Anda
+                type: "DELETE",
+            }).done(result => {
+                Swal.fire('Deleted!', 'Data berhasil dihapus.', 'success').then(() => {
+                    location.reload();
+                });
+            }).fail(error => {
+                Swal.fire('Error!', 'Gagal menghapus data.', 'error');
+            });
+        }
+    });
+}
+
+function Update() {
+    // Mendapatkan nilai-nilai input
+    let firstName = document.querySelector("#firstNameU").value;
+    let guid = document.querySelector("#guidU").value;
+    let nik = document.querySelector("#nikU").value;
+    let lastName = document.querySelector("#lastNameU").value;
+    let birthDate = document.querySelector("#birthDateU").value;
+    let gender = document.querySelector("#genderU").value;
+    let genderEnum;
+    if (gender === "0") {
+        genderEnum = 0;
+    } else if (gender === "1") {
+        genderEnum = 1;
+    }
+    let hiringDate = document.querySelector("#hiringDateU").value;
+    let email = document.querySelector("#emailU").value;
+    let phoneNumber = document.querySelector("#phoneNumberU").value;
+    // Data ke api
+    let data = {
+        firstName: firstName,
+        lastName: lastName,
+        birthDate: birthDate,
+        gender: genderEnum,
+        hiringDate: hiringDate,
+        email: email,
+        phoneNumber: phoneNumber,
+        nik: nik,
+        guid: guid
+    };
+    console.log(data);
+    $.ajax({
+        url: "https://localhost:7000/api/employees", // Sesuaikan URL sesuai dengan endpoint API Anda
+        type: "PUT",
+        data: JSON.stringify(data),
+        contentType: "application/json"
+    }).done(result => {
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Your work has been saved',
+            showConfirmButton: true,
+            confirmButtonText: 'OK',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                location.reload();
+            }
+        });
+    }).fail(error => {
+        alert("Insert failed"); // Tampilkan alert pemberitahuan jika gagal
+    });
+}
+
+
+// create chart
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    responsive: true,
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes', // label
+            data: [12, 19, 3, 5, 2, 3], // data
+            backgroundColor: [ // warna
+                'rgba(255, 99, 132, 0.2)', // red
+                'rgba(54, 162, 235, 0.2)', // blue
+                'rgba(255, 206, 86, 0.2)', // yellow
+                'rgba(75, 192, 192, 0.2)', // green
+                'rgba(153, 102, 255, 0.2)', // purple
+                'rgba(255, 159, 64, 0.2)' // orange
+            ],
+            borderColor: [ // warna border
+                'rgba(255, 99, 132, 1)', // red
+                'rgba(54, 162, 235, 1)', // blue
+                'rgba(255, 206, 86, 1)', // yellow
+                'rgba(75, 192, 192, 1)', // green
+                'rgba(153, 102, 255, 1)', // purple
+                'rgba(255, 159, 64, 1)' // orange
+            ],
+            borderWidth: 1 // ketebalan border
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true // mulai dari 0
+            }
+        }
+    }
 });
