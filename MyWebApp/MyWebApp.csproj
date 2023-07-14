@@ -95,4 +95,8 @@
     <None Include="wwwroot\AdminLTE\js\pages\dashboard3.js" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\API\API.csproj" />
+  </ItemGroup>
+
 </Project>
