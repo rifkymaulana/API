@@ -98,7 +98,7 @@ internal class Program
                     ClockSkew = TimeSpan.Zero
                 };
             });
-        
+
         // CORS Configuration
         builder.Services.AddCors(options =>
         {
@@ -154,7 +154,13 @@ internal class Program
             app.UseSwaggerUI();
         }
 
-        app.UseCors();
+        app.UseCors(build =>
+        {
+            build
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
 
         app.UseHttpsRedirection();
 
