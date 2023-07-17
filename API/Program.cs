@@ -154,9 +154,9 @@ internal class Program
             app.UseSwaggerUI();
         }
 
-        app.UseCors(builder =>
+        app.UseCors(build =>
         {
-            builder
+            build
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader();

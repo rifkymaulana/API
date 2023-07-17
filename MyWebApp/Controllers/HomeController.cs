@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using API.Utilities.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyWebApp.Models;
@@ -14,6 +16,7 @@ public class HomeController : Controller
         _logger = logger;
     }
 
+    [Authorize(Roles = $"{nameof(RoleLevelEnum.User)}")]
     public IActionResult Index()
     {
         return View();

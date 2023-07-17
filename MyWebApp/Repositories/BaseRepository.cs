@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using System.Text;
 using API.Utilities;
 using MyWebApp.Contracts;
@@ -10,15 +11,17 @@ public class BaseRepository<Entity, TId> : IBaseRepository<Entity, TId>
 {
         private readonly string request;
         private readonly HttpClient httpClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public BaseRepository(string request)
         {
             this.request = request;
+            _httpContextAccessor = new HttpContextAccessor();
             httpClient = new HttpClient
             {
                 BaseAddress = new Uri("https://localhost:7000/api/")
             };
-            this.request = request;
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _httpContextAccessor.HttpContext.Session.GetString("JWToken"));
         }
 
         public async Task<ResponseHandler<Entity>> Delete(TId guid)
